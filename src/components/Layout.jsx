@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X, ShoppingCart, MapPin, Phone, Instagram, Facebook } from 'lucide-react';
+import { useCart } from '../context/CartContext';
+import CartSidebar from './CartSidebar';
 import './Layout.css';
 
 const Layout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { toggleCart, cartCount } = useCart();
     const location = useLocation();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -18,6 +21,7 @@ const Layout = () => {
 
     return (
         <div className="layout">
+            <CartSidebar />
             <header className="header">
                 <div className="container header-content">
                     <Link to="/" className="logo">
@@ -39,8 +43,9 @@ const Layout = () => {
                     </nav>
 
                     <div className="header-actions">
-                        <button className="icon-btn" aria-label="Cart">
+                        <button className="icon-btn cart-btn" onClick={toggleCart} aria-label="Cart">
                             <ShoppingCart size={24} />
+                            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                         </button>
                         <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Menu">
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}

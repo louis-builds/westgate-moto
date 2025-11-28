@@ -1,12 +1,14 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Check, Truck } from 'lucide-react';
+import { ArrowLeft, Check, Truck, ShoppingCart } from 'lucide-react';
 import { products, categories } from '../data/mockData';
+import { useCart } from '../context/CartContext';
 import './PartDetail.css';
 
 const PartDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const product = products.find(p => p.id === parseInt(id));
 
     if (!product) {
@@ -18,9 +20,8 @@ const PartDetail = () => {
         );
     }
 
-    const handleInquire = () => {
-        // Navigate to booking page with pre-filled part info (in a real app, use context or query params)
-        navigate('/booking', { state: { product } });
+    const handleAddToCart = () => {
+        addToCart(product);
     };
 
     return (
@@ -57,8 +58,8 @@ const PartDetail = () => {
                         </div>
 
                         <div className="detail-actions">
-                            <button onClick={handleInquire} className="btn btn-primary btn-block">
-                                Inquire / Order Now
+                            <button onClick={handleAddToCart} className="btn btn-primary btn-block">
+                                <ShoppingCart size={20} style={{ marginRight: '8px' }} /> Add to Cart
                             </button>
                             <p className="shipping-note"><Truck size={16} /> Available for shipping or in-store pickup</p>
                         </div>
